@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Weather App</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <div class="card mt-3">
+        <div class="search">
+            <input type="text" placeholder="enter city name" spellcheck="false">
+            <button class="button">get</button>
+        </div>
+        <div class="error">
+        <p class="text-dark">Invalid city name</p>
+        </div>
+        
+        <div class="weather">
+            <br><h2 class="temp">22&#8451;</h2>
+            <h3 class="city">New York</h3>
+            <!-- <h4 class="weather-description">Cloudy</h4> -->
+            <div class="details">
+                <div class="col-md-6">
+                    <div>
+                        <p class="humidity mx-2">50%</p>
+                        <p>Humidity<span class=""> <img src="./assets/images/humidity.webp" width="30%"  alt=""></span></p>
+                        
+                    </div>
+                   
+                    
+                </div>
+                <div class="col md-6">
+                    <div class="mx-3">
+                        <p class="wind mx-2">15 kmph</p>
+                        <p>Wind Speed<span class=""> <img src="./assets/images/wind.png" width="20%" alt=""></span></p>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+// axios functionality
+
+    const apiKey="e2362f6bc77acf1d1c7701181194ba85";
+    const apiUrl="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+    const searchBox=document.querySelector(".search input")
+    const searchBtn=document.querySelector(".search button")
+    async function checkWeather(city){
+        try{
+            console.log("testfvgbvh");
+        // const response = await axios.get(apiUrl + city + `&appid=${apiKey}`)
+        const response=await axios.get(apiUrl+city+`&appid=${apiKey}`)
+
+        console.log("testfvgvh", response);
+
+       
+        
+        const data = response.data;
+        document.querySelector(".error").style.display="none"
+
+        document.querySelector(".weather").style.display="block"
+        document.querySelector(".city").innerHTML = data.name
+        document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C" 
+        // document.querySelector(".weather-description").innerHTML = data.main.weather-description 
+        document.querySelector(".humidity").innerHTML = data.main.humidity + "%"
+        document.querySelector(".wind").innerHTML = data.wind.speed + "km/hr"
+
+       
+
+        
+    //     var weatherImage = data.weather[0].main.toLowerCase();
+
+    //    const weatherIcon = document.querySelector(".weather-icon");
+    //    console.log(weatherIcon.src);
+    //    weatherIcon.src = `images/${weatherImage}.png`;
+       
+
+    //    console.log(weatherIcon.src) 
+    }
+    catch(error){
+        console.error("test", error.response.status);
+        if(error.response.status==404){
+            document.querySelector(".error").style.display="block"
+            document.querySelector(".weather").style.display="none"
+            return;
+        }
+
+    }
+
+
+
+    }
+    searchBtn.addEventListener("click",()=>{
+        checkWeather(searchBox.value)
+    })
+
+</script>
+</html>
